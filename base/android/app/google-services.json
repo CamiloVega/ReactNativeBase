@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "24723480971",
+    "firebase_url": "https://base-cvdevelopers-react.firebaseio.com",
+    "project_id": "base-cvdevelopers-react",
+    "storage_bucket": "base-cvdevelopers-react.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24723480971:android:9bbc3429ba713d47",
+        "android_client_info": {
+          "package_name": "com.cvdevelopers.base"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "24723480971-4i542aj2jkmm4mgrc123lkmjq17r9e8v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cvdevelopers.base",
+            "certificate_hash": "391b2b185b86448ae555fc99bba04b9ed33d661a"
+          }
+        },
+        {
+          "client_id": "24723480971-ppb47lfjmebtiosghd1uru7elk3de7ac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmzaPMCyvM031kk7G3e54oNbIa-vw5zy0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "24723480971-ppb47lfjmebtiosghd1uru7elk3de7ac.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
