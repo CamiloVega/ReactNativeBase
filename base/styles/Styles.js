@@ -4,7 +4,7 @@ export const MAIN_THEME_COLOR = '#009B6B'
 const BUTTON_BG_COLOR = MAIN_THEME_COLOR
 const BUTTON_TEXT_COLOR = '#FFFFFF'
 const TEXT_INPUT_BG_COLOR = '#FFFFFF'
-const LABEL_TEXT_COLOR = '#AFAFAF'
+const LABEL_TEXT_COLOR = '#000000'
 const SEPARATOR_COLOR = '#8E8E8E'
 const CARDVIEW_BG_COLOR = '#FFFFFF'
 const HEADING_LABEL_COLOR = '#000000'
@@ -53,6 +53,13 @@ export const styles = StyleSheet.create({
   }, 
   text_view_heading_1: {
     fontSize: 24,
+    textAlign: 'center',
+    color: LABEL_TEXT_COLOR,
+    backgroundColor: '#00000000',
+    // fontFamily: APPLICATION_FONT
+  },
+  text_view_heading_2: {
+    fontSize: 20,
     textAlign: 'center',
     color: LABEL_TEXT_COLOR,
     backgroundColor: '#00000000',
