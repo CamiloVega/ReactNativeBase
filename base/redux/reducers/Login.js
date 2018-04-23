@@ -1,4 +1,4 @@
-import {LOGIN_USER, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, LOGIN_USER_CANCELLED, TOKEN_NOT_FOUND, TOKEN_NOT_VALID, FETCHING_TOKEN } from '../constants'
+import {LOGIN_USER, LOGOUT_USER, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, LOGIN_USER_CANCELLED, TOKEN_NOT_FOUND, TOKEN_NOT_VALID, FETCHING_TOKEN } from '../constants'
 
 const initialState = {
     isFetching: false,
@@ -8,6 +8,7 @@ const initialState = {
 export default function loginReducer (state = initialState, action) {
     switch (action.type) {
         case LOGIN_USER:
+        case LOGOUT_USER:
             return {
                 ...state,
                 isFetching: true,

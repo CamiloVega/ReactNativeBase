@@ -1,38 +1,58 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
-  Text,
-  View, Image, ListView, TextInput, KeyboardAvoidingView, Alert, AsyncStorage, ImageBackground,
+  View,
+  StyleSheet
 } from 'react-native';
-
-import { LoginManager } from 'react-native-fbsdk'
+import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux'
 import FacebookLoginButton from '../general_purpose/FacebookLoginButton'
-import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin'
-import { loginUserUsingFacebook, loginUserUsingGmail } from '../../redux/actions/LoginActions'
-import { setupGoogleSignIn } from '../../utils/SetupUtils'
-import { styles } from '../../styles/Styles'
+import Button from '../general_purpose/Button'
+import { logoutCurrentUser } from '../../redux/actions/LoginActions'
+import ProfileCard from './ProfileCard'
 export class ProfileView extends Component {
 
+  static navigationOptions = (navigation) => {
+    const { params = {} } = navigation.navigation.state;
+    return {
+      title: 'Profile',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: 'rgba(10,49,52,1)',
+      },
+      headerTitleStyle:
+        {
+          color: 'white',
+        },
+      headerRight: <Button onPress={() => params.handleLogOut()} >Log Out</Button>
+    }
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({ handleLogOut: this.handleLogOut.bind(this) });
+  }
+
+  handleLogOut = () => {
+    this.props.logoutCurrentUser(
+      this.props.user,
+      () => {
+        const resetAction = NavigationActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({ routeName: 'Login' })],
+        });
+        this.props.navigation.dispatch(resetAction);
+      },
+      (error) => {
+        alert("Error while loging out")
+      }
+
+    )
+  }
 
   render() {
-    let user = this.props.user
-    let loginSource = user.gmail_id != null ? require("../../image_resources/google_icon.png") : user.facebook_id != null ? require("../../image_resources/facebook_icon.png") : null
+    const { user, logoutCurrentUser } = this.props
     return (
       <View style={styles.main_container}>
-        <View style={styles.container_general}>
-          <View style={[styles.container_general_center, { backgroundColor: "#FFFFFF", borderRadius: 4, marginLeft: 20, marginRight: 20, marginTop: 80 }]}>
-            <Image resizeMode="cover" style={[styles.profile_image, { margin: 20 }]} source={{ uri: user.picture }} />
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={[styles.text_view_heading_1,{marginRight: 15}]}>{user.first_name.toUpperCase()} {user.last_name.toUpperCase()}</Text>
-              {
-                loginSource != null ? <Image source={loginSource} style={{ height: 30, width: 30 }} /> : null
-              }
-            </View>
-            <Text style={styles.text_view_heading_2}>{user.email}</Text>
-
-          </View>
-        </View>
+      { user != null && <ProfileCard user = {user} /> }
       </View>
     );
   }
@@ -47,10 +67,13 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setupGoogleSignIn: () => dispatch(setupGoogleSignIn()),
-    loginUserUsingFacebook: () => dispatch(loginUserUsingFacebook()),
-    loginUserUsingGmail: () => dispatch(loginUserUsingGmail())
+    logoutCurrentUser: (user, onSuccess, onError) => dispatch(logoutCurrentUser(user, onSuccess, onError)),
   }
 }
 
+const styles = StyleSheet.create({
+  main_container: {
+    flex: 1
+  }
+})
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileView)

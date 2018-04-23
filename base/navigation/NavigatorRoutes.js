@@ -6,11 +6,10 @@ import ProfileView from '../components/profile/ProfileView'
   export const RootNavigator = StackNavigator({
     Login: { 
         screen: LoginView,
-        navigationOptions: { header: null }
+        navigationOptions: { header: null} 
     },
     Profile: { 
         screen: ProfileView,
-        navigationOptions: { header: null }
     }
   }, {
       navigationOptions: ({navigation}) => ({

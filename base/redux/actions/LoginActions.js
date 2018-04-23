@@ -1,4 +1,4 @@
-import { LOGIN_USER, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, LOGIN_USER_CANCELLED, TOKEN_NOT_FOUND, TOKEN_NOT_VALID, REFRESH_CURRENT_USER } from '../constants'
+import { LOGIN_USER, LOGOUT_USER, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, LOGIN_USER_CANCELLED, TOKEN_NOT_FOUND, TOKEN_NOT_VALID, REFRESH_CURRENT_USER } from '../constants'
 import { LoginManager, AccessToken, GraphRequestManager, GraphRequest } from 'react-native-fbsdk';
 import { GoogleSignin } from 'react-native-google-signin'
 import firebase from 'firebase'
@@ -35,15 +35,13 @@ function continueSuccessfulFacebookLogin(result, userCallback) {
                 if (error) {
                     dispatch(loginUserFailed())
                 } else {
-                    //TODO WHAT TO DO WITH THE USER
                     var user = {
                         first_name: result.first_name,
                         last_name: result.last_name,
-                        picture: result.picture.data.url,
+                        picture: "https://graph.facebook.com/" + result.id.toString() + "/picture?width=400&height=500",
                         email: result.email,
                         facebook_id: result.id.toString()
                     }
-                    console.log("this is the result from Facebook", user)
                     const provider = firebase.auth.FacebookAuthProvider
                     continueSignInWithFirebase(provider, accessToken, () => {
                         userCallback(user);
@@ -64,27 +62,47 @@ function continueSuccessfulFacebookLogin(result, userCallback) {
             );
             // Start the graph request.
             new GraphRequestManager().addRequest(infoRequest).start();
-
         })
 }
 
 function continueSignInWithFirebase(authProvider, accessToken, onSuccess, onError) {
     const credential = authProvider.credential(accessToken)
     firebase.auth().signInWithCredential(credential).then((result) => {
-        console.log("this is the result from FIREBASE", result)
         onSuccess()
     }, (error) => {
         onError(error)
     })
 }
 
+export function logoutCurrentUser(user, onSuccess, onError) {
+    return (dispatch) => {
+        firebase.auth().signOut().then((result) => {
+            if (user.facebook_id) {
+                LoginManager.logOut()
+                dispatch(logoutUserSuccess())
+                onSuccess()
+
+                return
+            } else if (user.gmail_id) {
+                GoogleSignin.signOut().then((result) => {
+                    dispatch(logoutUserSuccess())
+                    onSuccess()
+                })
+                return
+            }
+            dispatch(logoutUserSuccess())
+            onSuccess()
+        }, (error) => {
+            onError(error)
+        })
+    }
+}
+
 export function loginUserUsingGmail() {
-    console.log("GOOGLE loginUserUsingGmail")
     return (dispatch) => {
         dispatch(loginUserProgress())
         GoogleSignin.signIn()
             .then((googleUser) => {
-                console.log("this is the result from Google", googleUser)
                 var user = {
                     first_name: googleUser.first_name,
                     last_name: googleUser.last_name,
@@ -93,18 +111,16 @@ export function loginUserUsingGmail() {
                     gmail_id: googleUser.id.toString()
                 }
                 const provider = firebase.auth.GoogleAuthProvider
-                continueSignInWithFirebase(provider, googleUser.idToken, 
+                continueSignInWithFirebase(provider, googleUser.idToken,
                     () => { // success
                         dispatch(loginUserSuccess(user))
                     }, (err) => { // error
-                        console.log("Firebase ERROR", err)
                         dispatch(loginUserFailed())
                     }
                 )
 
             })
             .catch((err) => {
-                console.log("GOOGLE ERROR", err)
                 dispatch(loginUserFailed())
             })
             .done();
@@ -116,6 +132,12 @@ export function loginUserUsingGmail() {
 function loginUserProgress() {
     return {
         type: LOGIN_USER,
+    }
+}
+
+function logoutUserSuccess() {
+    return {
+        type: LOGOUT_USER,
     }
 }
 

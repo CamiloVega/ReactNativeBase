@@ -1,46 +1,48 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } from 'react-native';
 
-export default class FacebookLoginButton extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { 
-      buttonText: props.buttonText,
-      onPressed: props.onPressed
-     };
-  }
+const FacebookLoginButton = (props) => {
+  const {container, facebook_button_text_style, facebook_icon} = styles
   
-  render() {
-    return (  
-        <TouchableOpacity style = {styles.container} onPress={this.props.onPressed} > 
-            <Text style = {styles.facebook_button_text_style}>
-              {this.state.buttonText}
-            </Text>
-        </TouchableOpacity>
-    );
-  }
-}
+  return (  
+      <TouchableOpacity style = {container} onPress={props.onPressed} > 
+        <Image source={require('../../image_resources/facebook_login_icon.png')} style = {facebook_icon}/>
+          <Text style = {facebook_button_text_style}>
+            Continue with Facebook
+          </Text>
+      </TouchableOpacity>
+  );
+};
+
 
 const styles = StyleSheet.create({
   container: {
-    width: 305,
-    height: 43,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#4267B2',
     borderRadius: 5,
+    marginLeft: 25,
+    marginRight: 25,
+    flexDirection: 'row'
   },
   facebook_button_text_style: {
     fontSize: 16,
+    flex: 1,
     textAlign: 'center',
     color: '#FFFFFF',
   },
+  facebook_icon: {
+    marginLeft: 10, 
+    marginRight: 10,
+    height: 40,
+    width: 40
+  }
 });
 
-
-AppRegistry.registerComponent('FacebookLoginButton', () => FacebookLoginButton);
+export default FacebookLoginButton
