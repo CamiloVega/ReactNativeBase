@@ -8,10 +8,16 @@ const initialState = {
 export default function loginReducer (state = initialState, action) {
     switch (action.type) {
         case LOGIN_USER:
+        return {
+            ...state,
+            isFetching: true,
+            error: false,
+        }
         case LOGOUT_USER:
+        case LOGIN_USER_CANCELLED:
             return {
                 ...state,
-                isFetching: true,
+                isFetching: false,
                 error: false,
             }
         case LOGIN_USER_SUCCESS:

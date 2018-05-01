@@ -17,6 +17,7 @@
         android:label="@string/app_name"
         android:icon="@mipmap/ludos_icon"
         android:theme="@style/AppTheme">
+
         <service android:name="com.evollu.react.fcm.MessagingService" android:enabled="true" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
@@ -28,6 +29,7 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
+
         <activity
             android:name="com.cvdevelopers.base.MainActivity"
             android:launchMode="singleTop"

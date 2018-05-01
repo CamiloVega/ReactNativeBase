@@ -11,6 +11,7 @@ import FacebookLoginButton from '../general_purpose/FacebookLoginButton'
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin'
 import { loginUserUsingFacebook, loginUserUsingGmail } from '../../redux/actions/LoginActions'
 import { setupGoogleSignIn } from '../../utils/SetupUtils'
+import LoadingOverlay from 'react-native-loading-overlay'
 
 export class LoginView extends Component {
 
@@ -34,24 +35,28 @@ export class LoginView extends Component {
       this.props.navigation.navigate('Profile')
     }
   }
-  
+
   render() {
-    const { buttonContainer, 
-      textViewStyle, 
-      googleButtonStyle, 
-      mainContainer 
+    const { buttonContainer,
+      textViewStyle,
+      googleButtonStyle,
+      mainContainer
     } = localStyles
+    const { isFetching, error } = this.props.loginInfo
     return (
-      <ImageBackground source={require('../../image_resources/login_bg.jpg')} style={mainContainer}>
-        <Text style={textViewStyle}>CV DEVELOPERS EXAMPLE</Text>
-        <View style = {buttonContainer}>
-        <FacebookLoginButton onPressed={this.onFacebookLoginPressed} />
-        <GoogleSigninButton
-          style={googleButtonStyle}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Light}
-          onPress={this.googleSignIn.bind(this)} />
+      <ImageBackground source={require('../../image_resources/login_bg.jpg')} style={{flex: 1}}>
+        <View style={mainContainer}>
+          <Text style={textViewStyle}>CV DEVELOPERS EXAMPLE</Text>
+          <View style={buttonContainer}>
+            <FacebookLoginButton onPressed={this.onFacebookLoginPressed} />
+            <GoogleSigninButton
+              style={googleButtonStyle}
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Light}
+              onPress={this.googleSignIn.bind(this)} />
           </View>
+        </View>
+        <LoadingOverlay visible={isFetching} text = {'Registering user... '}/>
       </ImageBackground>
     );
   }
@@ -80,16 +85,16 @@ const localStyles = StyleSheet.create({
   },
   buttonContainer: {
     height: 120,
-   marginBottom: 50,
-   justifyContent: 'space-between'
+    marginBottom: 50,
+    justifyContent: 'space-between'
   },
   textViewStyle: {
     fontSize: 24,
     textAlign: 'center',
     backgroundColor: '#00000000',
     color: '#FFFFFF',
-    textAlign: 'center', 
-    margin: 60, 
+    textAlign: 'center',
+    margin: 60,
     backgroundColor: 'rgba(0,0,0,0)'
   },
   googleButtonStyle: {
