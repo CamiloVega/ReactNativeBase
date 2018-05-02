@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground, TextInput } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
-
+import { testUserNotifications} from '../../api/UserService'
+import Button from '../general_purpose/Button'
 const ProfileCard = (props) => {
+
+    // const testUserNotificationsPressed = () => {
+    //     console.log("testUserNotifications")
+    //     console.log("token", global.authToken)
+    //     testUserNotifications()
+    // }
+
     const { picture, first_name, last_name, email } = props.user
     const {
         card,
@@ -33,6 +41,7 @@ const ProfileCard = (props) => {
                     textColor='#FFFFFF'
                     fontSize={25}
                     value={first_name}
+                    disabled = {true}
                 />
                  <TextField
                     style={{ flex: 1, marginLeft: 20 }}
@@ -41,6 +50,7 @@ const ProfileCard = (props) => {
                     textColor='#FFFFFF'
                     fontSize={25}
                     value={last_name}
+                    disabled = {true}
                 />
                 <TextField
                     style={{ flex: 1, marginLeft: 20 }}
@@ -49,7 +59,11 @@ const ProfileCard = (props) => {
                     textColor='#FFFFFF'
                     fontSize={25}
                     value={email}
+                    disabled = {true}
                 />
+                <Button onPress = {testUserNotifications}>
+                 Test Notifications
+                </Button>
             </View>
         </View>
     );

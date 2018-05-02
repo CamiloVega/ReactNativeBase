@@ -9,7 +9,7 @@ import { LoginManager } from 'react-native-fbsdk'
 import { connect } from 'react-redux'
 import FacebookLoginButton from '../general_purpose/FacebookLoginButton'
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin'
-import { loginUserUsingFacebook, loginUserUsingGmail } from '../../redux/actions/LoginActions'
+import { loginUserUsingFacebook, loginUserUsingGmail, loginUserInServer } from '../../redux/actions/LoginActions'
 import { setupGoogleSignIn } from '../../utils/SetupUtils'
 import LoadingOverlay from 'react-native-loading-overlay'
 
@@ -31,8 +31,10 @@ export class LoginView extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (nextProps.signedInUser != null) {
+    if (this.props.signedInUser == null && nextProps.signedInUser != null) {
       this.props.navigation.navigate('Profile')
+    } else if (this.props.firebaseUser == null && nextProps.firebaseUser) {
+      this.props.loginUserInServer(nextProps.firebaseUser)
     }
   }
 
@@ -65,7 +67,8 @@ export class LoginView extends Component {
 function mapStateToProps(state) {
   return {
     loginInfo: state.Login,
-    signedInUser: state.User.currentUser
+    signedInUser: state.User.currentUser,
+    firebaseUser: state.FirebaseCloudMessaging.firebaseUser
   }
 }
 
@@ -73,7 +76,8 @@ function mapDispatchToProps(dispatch) {
   return {
     setupGoogleSignIn: () => dispatch(setupGoogleSignIn()),
     loginUserUsingFacebook: () => dispatch(loginUserUsingFacebook()),
-    loginUserUsingGmail: () => dispatch(loginUserUsingGmail())
+    loginUserUsingGmail: () => dispatch(loginUserUsingGmail()),
+    loginUserInServer: (firebaseUser) => dispatch(loginUserInServer(firebaseUser))
   }
 }
 

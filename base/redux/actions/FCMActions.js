@@ -1,25 +1,20 @@
 import { FCM_TOKEN } from '../constants'
+import { Platform } from 'react-native'
 import FCM, { FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType } from 'react-native-fcm';
 
 export function initializeFirebaseMessaging() {
     return (dispatch) => {
         // iOS: show permission prompt for the first call. later just check permission in user settings
         // Android: check permission in user settings
-        console.log("initializeFirebaseMessaging")
         FCM.requestPermissions()
             .then(() => {
-                console.log("requestPermissions")
                 FCM.getFCMToken()
                     .then(token => {
-                        console.log("getFCMToken")
                         // store fcm token in your server
                         dispatch(fmcToken(token))
                     });
 
-                this.notificationListener = FCM.on(FCMEvent.Notification, async (notif) => {
-                    // optional, do some component related stuff
-                });
-
+               
                 // initial notification contains the notification that launchs the app. If user launchs app by clicking banner, the banner notification info will be here rather than through FCM.on event
                 // sometimes Android kills activity when app goes to background, and when resume it broadcasts notification before JS is run. You can use FCM.getInitialNotification() to capture those missed events.
                 // initial notification will be triggered all the time even when open app by icon so send some action identifier when you send notification
@@ -28,6 +23,7 @@ export function initializeFirebaseMessaging() {
                 });
 
                 FCM.on(FCMEvent.Notification, async (notif) => {
+                    console.log("RECEIVED NOTIFICATION AT LEAST", notif)
                     // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
                     if (notif.local_notification) {
                         //this is a local notification
@@ -37,7 +33,7 @@ export function initializeFirebaseMessaging() {
                         //Android: app is open/resumed because user clicked banner or tapped app icon
                     }
                     // await someAsyncCall();
-
+                    
                     if (Platform.OS === 'ios') {
                         //optional
                         //iOS requires developers to call completionHandler to end notification process. If you do not call it your background remote notifications could be throttled, to read more about it see the above documentation link.
@@ -63,8 +59,6 @@ export function initializeFirebaseMessaging() {
                 });
             })
             .catch(() => {
-                console.log('notification permission rejected')
-
                 return
             });
     }

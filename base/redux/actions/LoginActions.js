@@ -1,11 +1,22 @@
-import { LOGIN_USER, LOGOUT_USER, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, LOGIN_USER_CANCELLED, TOKEN_NOT_FOUND, TOKEN_NOT_VALID, REFRESH_CURRENT_USER } from '../constants'
+import {
+    LOGIN_USER,
+    LOGOUT_USER,
+    LOGIN_USER_SUCCESS,
+    LOGIN_USER_ERROR,
+    LOGIN_USER_CANCELLED,
+    TOKEN_NOT_FOUND,
+    TOKEN_NOT_VALID,
+    REFRESH_CURRENT_USER,
+    LOGIN_FIREBASE_SUCCESS
+} from '../constants'
 import { LoginManager, AccessToken, GraphRequestManager, GraphRequest } from 'react-native-fbsdk';
 import { GoogleSignin } from 'react-native-google-signin'
+import { logUserOnServer} from '../../api/UserService'
 import firebase from 'firebase'
 
 export function loginUserUsingGmail() {
     return (dispatch, getState) => {
-        const {fcmToken} = getState().FirebaseCloudMessaging
+        const { fcmToken } = getState().FirebaseCloudMessaging
         dispatch(loginUserProgress())
         GoogleSignin.signIn()
             .then((googleUser) => {
@@ -30,12 +41,12 @@ export function loginUserUsingGmail() {
 
 export function loginUserUsingFacebook() {
     return (dispatch, getState) => {
-        const {fcmToken} = getState().FirebaseCloudMessaging
+        const { fcmToken } = getState().FirebaseCloudMessaging
         dispatch(loginUserProgress())
         LoginManager.logInWithReadPermissions(['public_profile', 'email']).then(
             (result) => {
                 if (result.isCancelled) {
-                    console.log("Error loginUserUsingFacebook", isCancelled)
+                    console.log("Error loginUserUsingFacebook isCancelled")
                     dispatch(loginUserCancelled())
                 } else {
                     continueSuccessfulFacebookLogin(result, fcmToken, dispatch)
@@ -89,14 +100,22 @@ function continueSuccessfulFacebookLogin(result, fcmToken, dispatch) {
 function continueSignInWithFirebase(user, authProvider, accessToken, dispatch) {
     const credential = authProvider.credential(accessToken)
     firebase.auth().signInWithCredential(credential).then((result) => {
-        const {currentUser} = firebase.auth()
+        const { currentUser } = firebase.auth()
         user.firebase_uid = currentUser.uid
         user.display_name = currentUser.displayName
-        dispatch(loginUserSuccess(user))
+        dispatch(loginFirebaseSuccess(user))
     }, (error) => {
         console.log("Error continueSignInWithFirebase", error)
         dispatch(loginUserFailed())
     })
+}
+
+export function loginUserInServer(user) {
+    return (dispatch) => {
+        logUserOnServer(user, (registeredUser) => {
+            dispatch(loginUserSuccess(registeredUser))
+        })
+    }
 }
 
 export function logoutCurrentUser(user, onSuccess, onError) {
@@ -144,6 +163,14 @@ function loginUserFailed() {
 function loginUserCancelled() {
     return {
         type: LOGIN_USER_CANCELLED,
+    }
+}
+
+
+function loginFirebaseSuccess(data) {
+    return {
+        type: LOGIN_FIREBASE_SUCCESS,
+        data
     }
 }
 
