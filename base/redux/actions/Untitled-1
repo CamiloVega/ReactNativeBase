@@ -1,8 +1,0 @@
-  static navigationOptions = {
-    title: 'Profile',
-    header: ({state}) => ({
-        backgroundColor: 'rgba(10,49,52,1)',
-        tintColor: 'white',
-        right:  <Button onPress={() => state.params.onLogOutPressed()}> Log Out </Button>
-      })
-    }

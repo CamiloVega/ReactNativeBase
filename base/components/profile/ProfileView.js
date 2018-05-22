@@ -6,24 +6,18 @@ import {
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux'
 import FacebookLoginButton from '../general_purpose/FacebookLoginButton'
-import Button from '../general_purpose/Button'
+import NavBarButton from '../general_purpose/NavBarButton'
 import { logoutCurrentUser } from '../../redux/actions/LoginActions'
 import ProfileCard from './ProfileCard'
+
 export class ProfileView extends Component {
+
 
   static navigationOptions = (navigation) => {
     const { params = {} } = navigation.navigation.state;
     return {
       title: 'Profile',
-      headerTintColor: 'white',
-      headerStyle: {
-        backgroundColor: 'rgba(10,49,52,1)',
-      },
-      headerTitleStyle:
-        {
-          color: 'white',
-        },
-      headerRight: <Button onPress={() => params.handleLogOut()} >Log Out</Button>
+      headerRight: <NavBarButton onPress={() => params.handleLogOut()} >Log Out</NavBarButton>,
     }
   }
 
@@ -35,11 +29,7 @@ export class ProfileView extends Component {
     this.props.logoutCurrentUser(
       this.props.user,
       () => {
-        const resetAction = NavigationActions.reset({
-          index: 0,
-          actions: [NavigationActions.navigate({ routeName: 'Login' })],
-        });
-        this.props.navigation.dispatch(resetAction);
+        this.props.navigation.navigate('Login')
       },
       (error) => {
         alert("Error while loging out")
@@ -73,7 +63,9 @@ function mapDispatchToProps(dispatch) {
 
 const styles = StyleSheet.create({
   main_container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#E1E1E1'
   }
 })
+
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileView)

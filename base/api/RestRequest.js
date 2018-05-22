@@ -1,15 +1,15 @@
 import React from 'react';
 
-export function restAuthRequest(method, route, body, callback, onError = (error) => {}) {
+export function restAuthRequest({method, route, body}, callback, onError = (error) => {}) {
     if (!global.authToken) {
         onError("user not authenticated")
         return
     }
     const header = {'X-TOKEN-AUTH': global.authToken}
-    restRequest(method, route, body, callback, onError, header)
+    restRequest({method, route, body}, callback, onError, header)
 }
 
-export function restRequest(method, route, body, callback, onError = (error) => {}, headers = {} ) {
+export function restRequest({method, route, body}, callback, onError = (error) => {}, headers = {} ) {
     fetch(route, {
         method: method,
         headers: {

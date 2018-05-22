@@ -7,11 +7,14 @@ import {
     TOKEN_NOT_FOUND,
     TOKEN_NOT_VALID,
     REFRESH_CURRENT_USER,
-    LOGIN_FIREBASE_SUCCESS
+    LOGIN_FIREBASE_SUCCESS,
+    CURRENT_USER_TOKEN,
+    FETCHING_TOKEN
 } from '../constants'
+import { AsyncStorage } from 'react-native'
 import { LoginManager, AccessToken, GraphRequestManager, GraphRequest } from 'react-native-fbsdk';
 import { GoogleSignin } from 'react-native-google-signin'
-import { logUserOnServer} from '../../api/UserService'
+import { logUserOnServer, logUserUsingTokenServer } from '../../api/UserService'
 import firebase from 'firebase'
 
 export function loginUserUsingGmail() {
@@ -113,38 +116,66 @@ function continueSignInWithFirebase(user, authProvider, accessToken, dispatch) {
 export function loginUserInServer(user) {
     return (dispatch) => {
         logUserOnServer(user, (registeredUser) => {
-            dispatch(loginUserSuccess(registeredUser))
+            global.authToken = registeredUser.token
+            AsyncStorage.setItem(CURRENT_USER_TOKEN, registeredUser.token)
+                .then(() => {
+                    dispatch(loginUserSuccess(registeredUser))
+                })
         })
+    }
+}
+
+export function loginUserUsingToken() {
+    return (dispatch) => {
+        dispatch(loginUserTokenProgress())
+        AsyncStorage.getItem(CURRENT_USER_TOKEN)
+            .then((token) => {
+                if(token){
+                    global.authToken = token
+                    logUserUsingTokenServer(token, (registeredUser) => {
+                        dispatch(loginUserSuccess(registeredUser))
+                    })
+                } else {
+                    dispatch(tokenNotFound())
+                }
+            })
     }
 }
 
 export function logoutCurrentUser(user, onSuccess, onError) {
     return (dispatch, getState) => {
-        firebase.auth().signOut().then((result) => {
-            if (user.facebook_id) {
+        AsyncStorage.clear().then(() => {
+            global.authToken = null
+            firebase.auth().signOut().then((result) => {
                 LoginManager.logOut()
+                GoogleSignin.signOut()
                 dispatch(logoutUserSuccess())
                 onSuccess()
-                return
-            } else if (user.gmail_id) {
-                GoogleSignin.signOut().then((result) => {
-                    dispatch(logoutUserSuccess())
-                    onSuccess()
-                })
-                return
-            }
-            dispatch(logoutUserSuccess())
-            onSuccess()
         }, (error) => {
             console.log("Error logoutCurrentUser", error)
             onError(error)
         })
+           
+        })
+        
     }
 }
 
 function loginUserProgress() {
     return {
         type: LOGIN_USER,
+    }
+}
+
+function loginUserTokenProgress() {
+    return {
+        type: FETCHING_TOKEN,
+    }
+}
+
+function tokenNotFound() {
+    return {
+        type: TOKEN_NOT_FOUND,
     }
 }
 

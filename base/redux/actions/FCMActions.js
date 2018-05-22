@@ -23,7 +23,6 @@ export function initializeFirebaseMessaging() {
                 });
 
                 FCM.on(FCMEvent.Notification, async (notif) => {
-                    console.log("RECEIVED NOTIFICATION AT LEAST", notif)
                     // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
                     if (notif.local_notification) {
                         //this is a local notification
@@ -50,6 +49,9 @@ export function initializeFirebaseMessaging() {
                                 notif.finish(WillPresentNotificationResult.All) //other types available: WillPresentNotificationResult.None
                                 break;
                         }
+                    } else {
+                        const {title, body} = notif.fcm
+                        FCM.presentLocalNotification({title, body, show_in_foreground: true })
                     }
                 });
 

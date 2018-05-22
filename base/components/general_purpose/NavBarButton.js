@@ -24,10 +24,10 @@ const styles = {
     paddingBottom: 10
   },
   buttonStyle: {
-    height: 60,
+    flex: 1,
     alignSelf: 'stretch',
     justifyContent: 'center',
-    backgroundColor: 'rgba(10,49,52,1)',
+    backgroundColor: 'rgba(0,0,0,0)',
     borderRadius: 5,
     marginLeft: 5,
     marginRight: 5

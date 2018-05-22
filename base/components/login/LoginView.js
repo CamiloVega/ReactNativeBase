@@ -15,13 +15,6 @@ import LoadingOverlay from 'react-native-loading-overlay'
 
 export class LoginView extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      navigation: props.navigation
-    };
-  }
-
   onFacebookLoginPressed = () => {
     this.props.loginUserUsingFacebook()
   }
@@ -32,7 +25,7 @@ export class LoginView extends Component {
 
   componentWillUpdate(nextProps, nextState) {
     if (this.props.signedInUser == null && nextProps.signedInUser != null) {
-      this.props.navigation.navigate('Profile')
+      this.props.navigation.navigate('Main', {user: nextProps.signedInUser})
     } else if (this.props.firebaseUser == null && nextProps.firebaseUser) {
       this.props.loginUserInServer(nextProps.firebaseUser)
     }
