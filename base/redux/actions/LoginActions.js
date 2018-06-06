@@ -9,7 +9,8 @@ import {
     REFRESH_CURRENT_USER,
     LOGIN_FIREBASE_SUCCESS,
     CURRENT_USER_TOKEN,
-    FETCHING_TOKEN
+    FETCHING_TOKEN,
+    NETWORK_ERROR
 } from '../constants'
 import { AsyncStorage } from 'react-native'
 import { LoginManager, AccessToken, GraphRequestManager, GraphRequest } from 'react-native-fbsdk';
@@ -121,6 +122,9 @@ export function loginUserInServer(user) {
                 .then(() => {
                     dispatch(loginUserSuccess(registeredUser))
                 })
+        }, (error) => {
+            dispatch(networkError())
+            dispatch(loginUserFailed())
         })
     }
 }
@@ -130,10 +134,13 @@ export function loginUserUsingToken() {
         dispatch(loginUserTokenProgress())
         AsyncStorage.getItem(CURRENT_USER_TOKEN)
             .then((token) => {
-                if(token){
+                if (token) {
                     global.authToken = token
                     logUserUsingTokenServer(token, (registeredUser) => {
                         dispatch(loginUserSuccess(registeredUser))
+                    }, (error) => {
+                        dispatch(networkError())
+                        dispatch(loginUserFailed())
                     })
                 } else {
                     dispatch(tokenNotFound())
@@ -151,13 +158,13 @@ export function logoutCurrentUser(user, onSuccess, onError) {
                 GoogleSignin.signOut()
                 dispatch(logoutUserSuccess())
                 onSuccess()
-        }, (error) => {
-            console.log("Error logoutCurrentUser", error)
-            onError(error)
+            }, (error) => {
+                console.log("Error logoutCurrentUser", error)
+                onError(error)
+            })
+
         })
-           
-        })
-        
+
     }
 }
 
@@ -209,5 +216,11 @@ function loginUserSuccess(data) {
     return {
         type: LOGIN_USER_SUCCESS,
         data
+    }
+}
+
+function networkError() {
+    return {
+        type: NETWORK_ERROR,
     }
 }

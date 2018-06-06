@@ -1,15 +1,17 @@
 import React from 'react';
 
-export function restAuthRequest({method, route, body}, callback, onError = (error) => {}) {
+const REQUEST_TIMEOUT = 5000
+
+export function restAuthRequest({ method, route, body }, callback, onError = (error) => { }) {
     if (!global.authToken) {
         onError("user not authenticated")
         return
     }
-    const header = {'X-TOKEN-AUTH': global.authToken}
-    restRequest({method, route, body}, callback, onError, header)
+    const header = { 'X-TOKEN-AUTH': global.authToken }
+    restRequest({ method, route, body }, callback, onError, header)
 }
 
-export function restRequest({method, route, body}, callback, onError = (error) => {}, headers = {} ) {
+export function restRequest({ method, route, body }, callback, onError = (error) => { }, headers = {}) {
     fetch(route, {
         method: method,
         headers: {
@@ -17,12 +19,13 @@ export function restRequest({method, route, body}, callback, onError = (error) =
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        timeout: REQUEST_TIMEOUT
     })
         .then((response) => response.json())
         .then((response) => {
             callback(response)
-        }).catch(error => { 
-            onError(error) 
+        }).catch(error => {
+            onError(error)
         });
 }

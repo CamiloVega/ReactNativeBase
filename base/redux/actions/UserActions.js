@@ -1,6 +1,6 @@
-import { USER_LIST_UPDATED, USER_LIST_FETCHING} from '../constants'
+import { USER_LIST_UPDATED, USER_LIST_FETCHING, NETWORK_ERROR } from '../constants'
 
-import { getUserList} from '../../api/UserService'
+import { getUserList } from '../../api/UserService'
 import { database } from 'firebase';
 
 export function fetchUserList() {
@@ -8,6 +8,8 @@ export function fetchUserList() {
         dispatch(fetchProgress())
         getUserList((userList) => {
             dispatch(userListSuccess(userList))
+        }, (error) => {
+            dispatch(networkError())
         })
     }
 }
@@ -22,5 +24,11 @@ function userListSuccess(data) {
     return {
         type: USER_LIST_UPDATED,
         data
+    }
+}
+
+function networkError() {
+    return {
+        type: NETWORK_ERROR,
     }
 }

@@ -90,9 +90,7 @@ const localStyles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: '#00000000',
     color: '#FFFFFF',
-    textAlign: 'center',
     margin: 60,
-    backgroundColor: 'rgba(0,0,0,0)'
   },
   googleButtonStyle: {
     height: 50,

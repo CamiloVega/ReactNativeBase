@@ -1,24 +1,26 @@
 import React from 'react';
 import * as RestClient from './RestClient'
 
-export const logUserOnServer = ((user, callback) => {
+export const logUserOnServer = ((user, callback, onError = (error) => console.log(error)) => {
     RestClient.logUser(user, (userResponse) => {
-        callback(userResponse)}) // this is where error handling should happen. 
+        callback(userResponse)
+    }, onError)
 });
 
-export const logUserUsingTokenServer = ((token, callback) => {
+export const logUserUsingTokenServer = ((token, callback, onError = (error) => console.log(error)) => {
     RestClient.logUserUsingToken(token, (userResponse) => {
-        callback(userResponse)}) // this is where error handling should happen. 
+        callback(userResponse)
+    }, onError)
 });
 
-export const testUserNotifications = ((callback) => {
+export const testUserNotifications = ((callback, onError = (error) => console.log(error)) => {
     RestClient.testNotifications(() => {
         callback()
-    })
+    }, onError)
 });
 
-export const getUserList = ((callback) => {
+export const getUserList = ((callback, onError = (error) => console.log(error)) => {
     RestClient.getUserList((userList) => {
         callback(userList)
-    })
+    }, onError)
 });

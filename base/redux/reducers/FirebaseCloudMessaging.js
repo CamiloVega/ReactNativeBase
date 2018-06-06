@@ -1,23 +1,23 @@
-import {FCM_TOKEN, LOGIN_FIREBASE_SUCCESS, LOGOUT_USER} from '../constants'
+import { FCM_TOKEN, LOGIN_FIREBASE_SUCCESS, LOGOUT_USER } from '../constants'
 
 const initialState = {
     fcmToken: null,
     firebaseUser: null,
 }
 
-export default function fmcReducer (state = initialState, action) {
+export default function fmcReducer(state = initialState, action) {
     switch (action.type) {
         case FCM_TOKEN:
             return {
                 ...state,
                 fcmToken: action.data,
             }
-            case LOGIN_FIREBASE_SUCCESS: 
+        case LOGIN_FIREBASE_SUCCESS:
             return {
-                ...state, 
+                ...state,
                 firebaseUser: action.data
             }
-            case LOGOUT_USER: 
+        case LOGOUT_USER:
             return {
                 ...state,
                 firebaseUser: null
