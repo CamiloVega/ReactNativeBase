@@ -2,8 +2,10 @@
 let BASE_URL = "http://192.168.0.3:5000/mobile";
 
 let GET_USERS = BASE_URL + '/users';
+let GET_SUGGESTIONS = BASE_URL + '/suggestions';
 
-export const USER_LOGIN_ROUTE = GET_USERS + '/login'
-export const USER_TEST_NOTIFICATIONS_ROUTE = GET_USERS + '/test_notifications'
-export const USER_LIST_ROUTE = GET_USERS + '/user_list'
-export const PING_ROUTE = BASE_URL
+export const USER_LOGIN_ROUTE =  GET_USERS + '/login'
+export const USER_TEST_NOTIFICATIONS_ROUTE =  GET_USERS + '/test_notifications'
+export const USER_LIST_ROUTE =  GET_USERS + '/user_list'
+export const SUGGESTION_LIST_ROUTE =  GET_SUGGESTIONS + '/suggestion_list'
+export const PING_ROUTE =  BASE_URL

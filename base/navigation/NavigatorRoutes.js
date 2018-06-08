@@ -4,9 +4,14 @@ import LoginView from '../components/login/LoginView'
 import ProfileView from '../components/profile/ProfileView'
 import PassThroughView from '../components/passthrough/PassThroughView'
 import UserListView from '../components/user_list/UserListView'
+import SuggestionListView from '../components/suggestions/SuggestionListView'
+import SuggestionView from '../components/suggestions/SuggestionView'
+
 import {
     TouchableOpacity, Image, StyleSheet, ScrollView, Text, View, ImageBackground
 } from 'react-native';
+
+const AppMainColor = '#898989'
 
 const DrawerButton = ({ navigation }) => (
     <TouchableOpacity
@@ -20,12 +25,10 @@ const CustomDrawerContentComponent = (props) => {
     const { container, user_name_label, drawer_image, picture_container, blur_picture, drawer_items_container } = stylesNav
     return (
         <View style={{ flex: 1 }}>
-            <ImageBackground source={{ uri: picture }} style={blur_picture} blurRadius={10}>
-                <View style={picture_container}>
-                    <Image source={{ uri: picture }} style={drawer_image} />
-                    <Text style={user_name_label}>{display_name}</Text>
-                </View>
-            </ImageBackground>
+            <View style={picture_container}>
+                <Image source={{ uri: picture }} style={drawer_image} />
+                <Text style={user_name_label}>{display_name}</Text>
+            </View>
             <View style={drawer_items_container}>
                 <ScrollView style={{ flex: 1 }}>
                     <DrawerItems {...props} />
@@ -36,7 +39,6 @@ const CustomDrawerContentComponent = (props) => {
     )
 };
 
-
 const ProfileNavigator = StackNavigator({
     Profile: {
         screen: ProfileView,
@@ -44,18 +46,18 @@ const ProfileNavigator = StackNavigator({
             headerLeft: <DrawerButton navigation={navigation} />,
             headerTintColor: 'white',
             headerStyle: {
-                backgroundColor: 'rgba(10,49,52,1)',
+                backgroundColor: AppMainColor,
             },
             headerTitleStyle:
-                {
-                    color: 'white',
-                },
+            {
+                color: 'white',
+            },
         }),
     },
 },
-{
-    headerMode: 'screen'
-});
+    {
+        headerMode: 'screen'
+    });
 
 const UserListNavigator = StackNavigator({
     UserList: {
@@ -64,40 +66,62 @@ const UserListNavigator = StackNavigator({
             headerLeft: <DrawerButton navigation={navigation} />,
             headerTintColor: 'white',
             headerStyle: {
-                backgroundColor: 'rgba(10,49,52,1)',
+                backgroundColor: AppMainColor,
             },
             headerTitleStyle:
-                {
-                    color: 'white',
-                },
+            {
+                color: 'white',
+            },
         }),
     },
 },
-{
-    headerMode: 'screen'
-});
+    {
+        headerMode: 'screen'
+    });
+
+const SuggestionListNavigator = StackNavigator({
+    SuggestionList: {
+        screen: SuggestionListView,
+        navigationOptions: ({ navigation }) => ({
+            headerLeft: <DrawerButton navigation={navigation} />,
+            headerTintColor: 'white',
+            headerStyle: {
+                backgroundColor: AppMainColor,
+            },
+            headerTitleStyle:
+            {
+                color: 'white',
+            },
+        }),
+    },
+    SuggestionView: {
+        screen: SuggestionView,
+        navigationOptions: ({ navigation }) => ({
+
+        }),
+        
+    },
+},
+    {
+    });
 
 const MainDrawerNavigator = DrawerNavigator({
     Profile: {
         screen: ProfileNavigator,
         navigationOptions: {
             title: 'Profile',
-            drawerIcon: ({ }) => (
-                <Image
-                    source={require('../image_resources/drawer_profile.png')}
-                    style={{ tintColor: '#FFFFFF', height: 24, width: 24 }}
-                />)
         }
     },
     UserList: {
         screen: UserListNavigator,
         navigationOptions: {
             title: 'User List',
-            drawerIcon: ({ }) => (
-                <Image
-                    source={require('../image_resources/drawer_userlist.png')}
-                    style={{ tintColor: '#FFFFFF', height: 24, width: 24 }}
-                />)
+        }
+    },
+    SuggestionList: {
+        screen: SuggestionListNavigator,
+        navigationOptions: {
+            title: 'Suggestion List',
         }
     },
 },
@@ -106,10 +130,10 @@ const MainDrawerNavigator = DrawerNavigator({
         contentComponent: CustomDrawerContentComponent,
         headerMode: 'none',
         contentOptions: {
-            activeTintColor: 'rgba(10,49,52,1)',
-            inactiveTintColor: '#FFFFFF',
-            activeBackgroundColor: '#EFB6AD',
-            inactiveBackgroundColor: 'rgba(10,49,52,1)',
+            activeTintColor: '#000000',
+            inactiveTintColor: '#000000',
+            activeBackgroundColor: '#F0F0F0',
+            inactiveBackgroundColor: '#FFFFFF',
         }
     }
 );
@@ -157,7 +181,7 @@ const stylesNav = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: "stretch",
-        backgroundColor: 'rgba(0,0,0,0.3)'
+        backgroundColor: '#898989'
     },
     user_name_label: {
         fontSize: 30,
@@ -167,7 +191,7 @@ const stylesNav = StyleSheet.create({
     drawer_items_container: {
         flex: 5,
         alignSelf: "stretch",
-        backgroundColor: 'rgba(10,49,52,1)'
+        backgroundColor: '#FFFFFF'
     },
     blur_picture: {
         flex: 2,

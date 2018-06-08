@@ -11,7 +11,7 @@ export function restAuthRequest({ method, route, body }, callback, onError = (er
     restRequest({ method, route, body }, callback, onError, header)
 }
 
-export function restRequest({ method, route, body }, callback, onError = (error) => { }, headers = {}) {
+export function restRequest({ method, route, body }, callback, onError = (error) => { console.log('restRequest error: ' ,error) }, headers = {}) {
     fetch(route, {
         method: method,
         headers: {

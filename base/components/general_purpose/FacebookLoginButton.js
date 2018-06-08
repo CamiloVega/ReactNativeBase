@@ -8,7 +8,6 @@ import {
 
 const FacebookLoginButton = (props) => {
   const {container, facebook_button_text_style, facebook_icon} = styles
-  
   return (  
       <TouchableOpacity style = {container} onPress={props.onPressed} > 
         <Image source={require('../../image_resources/facebook_login_icon.png')} style = {facebook_icon}/>
