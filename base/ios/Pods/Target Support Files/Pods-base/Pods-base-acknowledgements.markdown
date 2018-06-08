@@ -15,11 +15,11 @@ Copyright 2017 Google
 
 ## FirebaseInstanceID
 
-Copyright 2017 Google
+Copyright 2018 Google
 
 ## FirebaseMessaging
 
-Copyright 2017 Google
+Copyright 2018 Google
 
 ## GTMOAuth2
 
@@ -435,7 +435,7 @@ Copyright 2017 Google
 
 ## GoogleSignIn
 
-Copyright 2017 Google
+Copyright 2018 Google
 
 ## GoogleToolboxForMac
 
@@ -645,17 +645,7 @@ Copyright 2017 Google
 
 ## Protobuf
 
-This license applies to all parts of Protocol Buffers except the following:
-
-  - Atomicops support for generic gcc, located in
-    src/google/protobuf/stubs/atomicops_internals_generic_gcc.h.
-    This file is copyrighted by Red Hat Inc.
-
-  - Atomicops support for AIX/POWER, located in
-    src/google/protobuf/stubs/atomicops_internals_power.h.
-    This file is copyrighted by Bloomberg Finance LP.
-
-Copyright 2014, Google Inc.  All rights reserved.
+Copyright 2008 Google Inc.  All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
