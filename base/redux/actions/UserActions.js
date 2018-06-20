@@ -3,16 +3,17 @@ import { USER_LIST_UPDATED, USER_LIST_FETCHING, NETWORK_ERROR } from '../constan
 import { getUserList } from '../../api/UserService'
 import { database } from 'firebase';
 
-export function fetchUserList() {
-    return (dispatch) => {
-        dispatch(fetchProgress())
-        getUserList((userList) => {
-            dispatch(userListSuccess(userList))
-        }, (error) => {
-            dispatch(networkError())
-        })
+export const fetchUserList = () => async dispatch => {
+    dispatch(fetchProgress())
+    try {
+        let userList = await getUserList()
+        dispatch(userListSuccess(userList))
+    } catch (error) {
+        console.log("Error fetchUserList", error )
+        dispatch(networkError())
     }
 }
+
 
 function fetchProgress() {
     return {

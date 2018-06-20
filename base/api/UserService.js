@@ -1,26 +1,10 @@
 import React from 'react';
 import * as RestClient from './RestClient'
 
-export const logUserOnServer = ((user, callback, onError = (error) => console.log(error)) => {
-    RestClient.logUser(user, (userResponse) => {
-        callback(userResponse)
-    }, onError)
-});
+export const logUserOnServer = (user) => RestClient.logFirebaseUser(user)   
 
-export const logUserUsingTokenServer = ((token, callback, onError = (error) => console.log(error)) => {
-    RestClient.logUserUsingToken(token, (userResponse) => {
-        callback(userResponse)
-    }, onError)
-});
+export const logUserUsingTokenServer = (token) => RestClient.logUserUsingToken(token)
 
-export const testUserNotifications = ((callback, onError = (error) => console.log(error)) => {
-    RestClient.testNotifications(() => {
-        callback()
-    }, onError)
-});
+export const testUserNotifications = () => RestClient.testNotifications()
 
-export const getUserList = ((callback, onError = (error) => console.log(error)) => {
-    RestClient.getUserList((userList) => {
-        callback(userList)
-    }, onError)
-});
+export const getUserList = () =>  RestClient.getUserList()

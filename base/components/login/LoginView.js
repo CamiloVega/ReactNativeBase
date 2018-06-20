@@ -16,10 +16,12 @@ import LoadingOverlay from 'react-native-loading-overlay'
 export class LoginView extends Component {
 
   onFacebookLoginPressed = () => {
+    console.log("onFacebookLoginPressed")
     this.props.loginUserUsingFacebook()
   }
 
-  googleSignIn() {
+  googleSignIn = () => {
+    console.log("googleSignIn")
     this.props.loginUserUsingGmail()
   }
 
@@ -48,7 +50,7 @@ export class LoginView extends Component {
               style={googleButtonStyle}
               size={GoogleSigninButton.Size.Wide}
               color={GoogleSigninButton.Color.Light}
-              onPress={this.googleSignIn.bind(this)} />
+              onPress={this.googleSignIn} />
           </View>
         </View>
         <LoadingOverlay visible={isFetching} text = {'Registering user... '}/>

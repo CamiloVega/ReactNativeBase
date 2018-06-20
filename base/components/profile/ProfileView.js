@@ -22,12 +22,11 @@ export class ProfileView extends Component {
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ handleLogOut: this.handleLogOut.bind(this) });
+    this.props.navigation.setParams({ handleLogOut: this.handleLogOut });
   }
 
   handleLogOut = () => {
     this.props.logoutCurrentUser(
-      this.props.user,
       () => {
         this.props.navigation.navigate('Login')
       },
@@ -57,7 +56,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    logoutCurrentUser: (user, onSuccess, onError) => dispatch(logoutCurrentUser(user, onSuccess, onError)),
+    logoutCurrentUser: (onSuccess, onError) => dispatch(logoutCurrentUser(onSuccess, onError)),
   }
 }
 
